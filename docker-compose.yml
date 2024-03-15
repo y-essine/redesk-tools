@@ -7,35 +7,44 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: redesk
+      POSTGRES_DB: redesktools
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 5432
     ports:
       - "5432:5432"
-  # django-back:
-  #   container_name: django-back
-  #   build:
-  #     context: ./back-tools
-  #   ports:
-  #     - 8000:8000
-  #   restart: on-failure
-  #   environment:
-  #     - DB_HOST=localhost
-  #     - DB_PORT=5432
-  #     - DB_NAME=redesk
-  #     - DB_USER=postgres
-  #     - DB_PASSWORD=5432
-  #   depends_on:
-  #     - postgres
-  front:
+  django-back:
+    container_name: django-back
+    build:
+      context: ./back-tools
+    volumes:
+      - ./back-tools:/app
+      - /static:/static
+      - /media:/media
+    ports:
+      - 8000:8000
+    restart: on-failure
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=redesktools
+      - DB_USER=postgres
+      - DB_PASSWORD=5432
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    depends_on:
+      - postgres
+  vue-front:
     container_name: vue-front
     build:
       context: ./front-tools
+    volumes:
+      - ./front-tools:/app
+      - /app/node_modules
     ports:
       - "5173:5173"
     restart: on-failure
     environment:
-      - VITE_BACKEND_URL=http://django-back:8000
+      - VITE_BACKEND_URL=http://localhost:8000
+      - VITE_SERPAPI_KEY=NA
       - NODE_ENV=development
 
 volumes:

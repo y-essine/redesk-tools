@@ -1,14 +1,14 @@
 import axios from 'axios';
 
+const BACK_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+
 const API = axios.create({
-  baseURL: 'http://127.0.0.1:8000', // Set your base URL here
-  timeout: 5000, // Set the timeout for requests (optional)
+  baseURL: BACK_URL,
+  timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
     // Add any default headers here
   },
 });
-
-// You can add interceptors, defaults, and other configurations here
 
 export default API;

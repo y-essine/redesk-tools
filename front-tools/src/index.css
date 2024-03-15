@@ -4,5 +4,5 @@
 
 :root {
     font-family: 'Inter', sans-serif;
-    @apply bg-zinc-900 text-zinc-300;
+    /* @apply bg-zinc-900 text-zinc-300; */
 }
